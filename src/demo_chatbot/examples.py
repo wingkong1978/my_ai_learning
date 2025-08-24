@@ -157,7 +157,7 @@ async def run_all_examples():
     console.print("[bold green]🚀 LangChain + LangGraph + MCP Agent Examples[/bold green]\n")
     
     # Check if API key is set
-    if not settings.MOONSHOT_API_KEY:
+    if not settings.moonshot_api_key:
         console.print("[red]❌ Please set your MOONSHOT_API_KEY in .env file[/red]")
         console.print("Copy .env.example to .env and add your API key")
         return
