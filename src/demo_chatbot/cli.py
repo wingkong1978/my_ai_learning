@@ -615,6 +615,39 @@ async def _run_chat(thread_id: str):
         console.print(f"[red]Failed to start chat session: {e}[/red]")
 
 
+@cli.command()
+@click.option('--host', default='127.0.0.1', help='Web server host')
+@click.option('--port', default=8000, help='Web server port')
+@click.option('--reload', is_flag=True, help='Enable auto-reload for development')
+@handle_cli_error
+def web(host: str, port: int, reload: bool):
+    """Start the web server for browser-based chat interface."""
+    console.print(f"[bold blue]🌐 Starting Web Server on http://{host}:{port}[/bold blue]")
+    
+    settings = get_settings()
+    
+    try:
+        settings.validate_api_key()
+    except ValueError as e:
+        console.print(f"[red]❌ {e}[/red]")
+        return
+    
+    try:
+        from demo_chatbot.web_server import run_server
+        
+        console.print(f"[dim]Access the chat interface at: http://{host}:{port}[/dim]")
+        console.print(f"[dim]API documentation at: http://{host}:{port}/api/docs[/dim]")
+        console.print("[yellow]Press Ctrl+C to stop the server[/yellow]\n")
+        
+        run_server(host=host, port=port, reload=reload)
+        
+    except ImportError as e:
+        console.print(f"[red]❌ Web server dependencies not installed: {e}[/red]")
+        console.print("[yellow]Install web dependencies with: pip install -e .[dev][/yellow]")
+    except Exception as e:
+        console.print(f"[red]❌ Failed to start web server: {e}[/red]")
+
+
 def main():
     """Main entry point for the demo-chatbot CLI."""
     try:
